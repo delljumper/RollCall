@@ -1,4 +1,11 @@
-﻿<!doctype html>
+﻿<!--
+@Project 计时器
+@authors zhangke (1350831467@qq.com)
+@date    2017-03-17 14:27:54
+@version 0.1
+
+-->
+<!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -26,7 +33,6 @@
     -->
     </style>
 </head>
-
 <body>
     <div id="Boxs" style="width:550px;height:530px;margin:auto;">
         <div style="width:250px;height:100%;float:left;">
@@ -47,44 +53,44 @@
     </div>
     <p style="width:500px;height:30px;color:#666;text-align:center;margin:20px auto;font-size:12px;">Roll Call&#40;Alpha&#41;&nbsp;Copyright&copy;zhangke</p>
     <script type="text/javascript">
-    var timeSpan; //计时器走过的时间
     var displayer = document.getElementById("p"); //时间显示器
     var status = 0,
         JudTrue = false,
         JudOn = false,
         JudBtn = "stop"; //计时状态
-    var text;
-    var strs = new Array();
-    var sc = 0;
-    autodivheight();
+    var text;//名单
+    var strs = new Array();//名单列表数组
+    var sc = 0;//数组下标
+    AutoDivHeight();
     /*自动垂直居中*/
-    function autodivheight() {
-        var Div = document.getElementById('Boxs');
-        var winHeight=0;
+    function AutoDivHeight() {
+        var Div=document.getElementById('Boxs');
+        var WinHeight=0;
         if (window.innerHeight)
-            winHeight = window.innerHeight;
-        else if ((document.body) && (document.body.clientHeight))
-            winHeight = document.body.clientHeight;
-        if (document.documentElement && document.documentElement.clientHeight)
-            winHeight = document.documentElement.clientHeight;
-        Div.style.marginTop = (winHeight-parseInt(Div.style.height))/2 + 'px';
+            WinHeight=window.innerHeight;
+        else if ((document.body)&&(document.body.clientHeight))
+            WinHeight=document.body.clientHeight;
+        if (document.documentElement&&document.documentElement.clientHeight)
+            WinHeight=document.documentElement.clientHeight;
+        Div.style.marginTop=(WinHeight-parseInt(Div.style.height))/2+'px';
     }
-    var start = function() {
-        if (JudBtn != "start") {
-            text = document.getElementById("text").value;
-            if (text != "") {
-                JudBtn = "start";
-                strs = text.split("\n");
-                for (var i = 0; i < strs.length; i++)
-                    if (strs[i] == "" || strs[i] == " " || strs[i] == "\n")
-                        for (var j = i; j < strs.length; j++)
-                            if (j == strs.length - 1)
-                                strs.length -= 1;
+
+    var start=function() {
+        if (JudBtn!="start") {//防止按钮重复点击
+            text=document.getElementById("text").value;//获取名单
+            if (text!="") {//非空值则执行下一步
+                JudBtn="start";
+                strs=text.split("\n");//分割名单为数组
+                for (var i=0;i<strs.length;i++)//遍历数组，检查数组内的空值转义字符并删除
+                    if (strs[i]==""||strs[i]==" "||strs[i]=="\n")
+                        for (var j=i;j<strs.length;j++)
+                            if (j==strs.length-1)
+                                strs.length-=1;//数组长度缩减
                             else
-                                strs[j] = strs[j + 1];
-                status = setTimeout(beat, 10);
+                                strs[j]=strs[j+1];//补上空位
+                status=setTimeout(beat, 10);//每0.01秒执行一次
             } else {
-                displayer.innerHTML = "请先输入名单！";
+                displayer.innerHTML="请先输入名单！";//名单为空则显示提示
             }
         }
     }
@@ -92,7 +98,7 @@
     var stop = function() {
         if (JudBtn != "stop") {
             JudBtn = "stop";
-            text = "";
+            text = "";//停止
             for (var j = 0; j < strs.length; j++) {
                 if (j >= sc)
                     strs[j] = strs[j + 1];
@@ -113,7 +119,7 @@
         if (sc >= strs.length)
             sc = 0;
         displayer.innerHTML = strs[sc];
-        status = setTimeout(beat, 10);
+        status = setTimeout(beat, 10);//每0.01秒循环一次
     }
     /*判断文本框焦点情况*/
     function Judon(dir) {
