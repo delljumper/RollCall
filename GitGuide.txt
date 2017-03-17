@@ -1,95 +1,95 @@
-Git config --global user.name "Your Name"
+﻿Git config --global user.name "Your Name"
 Git config --global user.email "email@example.com"
 
 Git config --lis
-�鿴Git����
+查看Git配置
 
 Git init
-�����汾��
+创建版本库
 
 Git add xxx
-��xxx�ļ����ӵ��ֿ�
+把xxx文件添加到仓库
 
-Git commit [-m "����˵��"]
-���ļ��ύ���ֿ�
+Git commit [-m "文字说明"]
+把文件提交到仓库
 
 Git status
-��ѯ�ֿ⵱ǰ״̬
+查询仓库当前状态
 
 Git diff
-�鿴�ļ����ݸĶ�
+查看文件内容改动
 
 Git log
-�鿴�ɽ���Զ���ύ��־
+查看由近至远的提交日志
 
 Git log --graph
-�鿴��֧�ϲ�ͼ
+查看分支合并图
 
 Git log --pretty=online
-��ʾ��Ҫ��Ϣ
+显示简要信息
 
 Git log --abbrev-commit
-��ʾ�����Ψһ��SHA-1ֵ
+显示简短且唯一的SHA-1值
 
 Git reflog
-�鿴ʹ�ù�������
+查看使用过的命令
 
 Git reset --hard [commit id]
-�˻ص��汾[commit id]
+退回到版本[commit id]
 
 ssh-keygen -t rsa -C "email@example.com"
-����SSH��Կ
+生成SSH密钥
 
-Git remote add origin git@github.com:[Զ�ֿ̲�SSH��ַ]
-ʹ��SSH����Զ�ֿ̲�
+Git remote add origin git@github.com:[远程仓库SSH地址]
+使用SSH连接远程仓库
 
 Git push [-u] origin master
-�ѱ��زֿ�master��֧���͵�Զ�ֿ̲�master�ϣ���һ�����͵�Զ�ֿ̲���Ҫ��[-u]���й�����������ʡ��
+把本地仓库master分支推送到远程仓库master上，第一次推送到远程仓库需要加[-u]进行关联，后续可省略
 
 Git pull --rebase origin master
-�ѱ��� repo. ���ϴ� pull ֮��ı���ݴ��������ָ����ϴ� pull ʱ��״̬���ϲ�Զ�˵ı�������أ�����ٺϲ��ո��ݴ����ı��ر��
+把本地 repo. 从上次 pull 之后的变更暂存起來，恢复到上次 pull 时的状态，合并远端的变更到本地，最后再合并刚刚暂存下來的本地变更
 
-Git clone git@github.com:[Զ�ֿ̲�SSH��ַ]
-ʹ��SSH��¡Զ�ֿ̲⵽����
+Git clone git@github.com:[远程仓库SSH地址]
+使用SSH克隆远程仓库到本地
 
 Git branch
-�г����з�֧����ǰ���ڷ�֧����ǰ׺*
+列出所有分支，当前所在分支附带前缀*
 
 Git branch xxx
-�����·�֧xxx
+创建新分支xxx
 
 Git branch -d xxx
-ɾ����֧xxx
+删除分支xxx
 
 Git checkout xxx
-�л����·�֧xxx
+切换到新分支xxx
 
 Git checkout -b xxx
-����xxx��֧���л����˷�֧
+创建xxx分支并切换到此分支
 
 Git merge xxx
-��xxx��֧�Ĺ����ɹ��ϲ���master��
+把xxx分支的工作成果合并到master上
 
-Git merge --no-ff -m "˵����Ϣ" xxx
-����Fast forwardģʽ�ϲ�xxx��֧��master
+Git merge --no-ff -m "说明信息" xxx
+禁用Fast forward模式合并xxx分支到master
 
 Git stash
-���ݵ�ǰ�Ĺ����������ݣ��������һ���ύ�ж�ȡ������ݣ��ù�������֤���ϴ��ύ������һ�¡�ͬʱ������ǰ�Ĺ��������ݱ��浽Gitջ��
+备份当前的工作区的内容，从最近的一次提交中读取相关内容，让工作区保证和上次提交的内容一致。同时，将当前的工作区内容保存到Git栈中
 
-Git stash save "���Ǳ�����Ϣ"
-���ݵ�ǰ�Ĺ�����������,��ע������Ϣ
+Git stash save "这是保存信息"
+备份当前的工作区的内容,备注保存信息
 
 Git stash pop
-��Gitջ�ж�ȡ���һ�α�������ݣ��ָ����������������,��ɾ��stash����
+从Git栈中读取最近一次保存的内容，恢复工作区的相关内容,并删除stash内容
 
 Git stash apply
-��Gitջ�ж�ȡ���һ�α�������ݣ��ָ���������������ݣ�stash���ݲ���ɾ����
+从Git栈中读取最近一次保存的内容，恢复工作区的相关内容，stash内容并不删除，
 
-Git stash drop [����]
-ɾ��ĳһ�����ݣ�Ĭ��ɾ�����±���
+Git stash drop [进度]
+删除某一个备份，默认删除最新备份
 
 Git stash list
-��ʾGitջ�ڵ����б���
+显示Git栈内的所有备份
 
 git stash clear
-���Gitջ
+清空Git栈
