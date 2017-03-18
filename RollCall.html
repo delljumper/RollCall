@@ -4,14 +4,19 @@
 @date    2017-03-17 14:27:54
 @version 0.1
 -->
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="Author" content="zhangke">
     <title>点名器</title>
-    <style>
+    <style type="text/css">
     <!--
-    .button {
+        *{margin: 0;padding: 0;}
+        a{text-decoration: none;}
+        ul,li{list-style: none;}
+        body{font-size: 14px;font-family: "微软雅黑";}
+        .button {
         width:100px;
         height:30px;
         background:#E27575;
@@ -25,42 +30,150 @@
         text-shadow:1px 1px 1px #9E3F3F;
         line-height:30px;
         margin:10px;
-    }
-    .button:hover {
-        background: #CF7A7A;
-    }
+        }
+        .button:hover {
+            background: #CF7A7A;
+        }
+        #displayer{
+            width:500px;
+            height:165px;
+            background: #F7F7F7;
+            margin:auto;
+            margin-top:50px;
+            font-size:90px;
+            text-align:center;
+            line-height:165px;
+        }
+        #calllist p{
+            width:100%;
+            font-size:24px;
+            padding-left:20px;
+        }
     -->
     </style>
 </head>
 <body>
-    <div id="Boxs" style="width:950px;height:530px;margin:auto;">
-        <div style="width:250px;height:100%;float:left;">
+    <div id="Boxs" style="width:940px;height:530px;margin:auto;">
+        <div style="width:200px;height:100%;float:left;">
             <label for="text">请在此处粘贴名单:</label>
-            <textarea id="text" name="text" style="width:200px;height:500px;" onfocus="Judon(false)" onblur="Judon(true)"></textarea>
+            <textarea id="list" name="text" style="width:200px;height:500px;"></textarea>
         </div>
-        <div style="width:500px;height:100%;float:left;">
+        <div style="width:500px;height:100%;float:left;margin:auto 20px;">
             <div>
-                <p id="p" style="width:500px;height:165px;margin:auto;margin-top:50px;font-size:80px;text-align:center;line-height:165px;background: #F7F7F7;"></p>
-                <div style="width:248px;height:50px;margin:auto auto;">
-                    <span id="strat" class="button" onclick="start()">开始</span>
-                    <span id="stop" class="button" onclick="stop()">结束</span>
+                <p id="displayer"></p>
+                <div style="width:248px;height:50px;margin:auto;">
+                    <span id="start" class="button">开始</span>
+                    <span id="stop" class="button">结束</span>
                 </div>
             </div>
             <p>请先把名单粘贴到左边文本区域</p>
             <p>空格：开始/暂停</p>
+            <form style="margin-top:20px;">
+            <label><input id="random" type="checkbox"/>:随机顺序</label>
+            <br />
+            <label><input id="debar" type="checkbox" checked="checked" />:排除已点</label>
+            </form>
+        </div>
+        <div id="calllist" style="width:200px;height:90%;float:left;margin-top:20px;padding-top:25px;background:#DCDCDC;overflow:auto;overflow-x:hidden;">
+        <h3 style="padding-left:20px;">已点名单:</h3>
+        <p>xxxxxx</p>
         </div>
     </div>
-    <p style="width:500px;height:30px;color:#666;text-align:center;margin:20px auto;font-size:12px;">Roll Call&#40;Alpha&#41;&nbsp;Copyright&copy;zhangke</p>
+    <p style="width:500px;height:30px;color:#666;text-align:center;margin:20px auto;font-size:12px;">Roll Call&nbsp;Alpha&nbsp;Copyright&copy;zhangke</p>
+
     <script type="text/javascript">
-        var displayer = document.getElementById("p"); //显示器
-        var status = 0,
-            JudTrue = false,
-            JudOn = false,
-            JudBtn = "stop"; //计时状态
-        var text;//名单
-        var strs = new Array();//名单列表数组
-        var sc = 0;//数组下标
-        /*自动垂直居中*/
+        function RollCall(){
+            var Displayer=document.getElementById("displayer");//显示器
+            var list;//名单
+            var isRun="stop";//当前正在执行的功能
+            //var Strs=new Array();//名单列表数组
+            var trS=0;//数组下标
+            var status=0;
+            var order=false,/*检查点名顺序*/
+                alrStr=true;/*检查点名规则*/
+
+        document.getElementById("start").onclick=function(){
+            Start();
+        };
+            document.getElementById("stop").onclick=function(){
+            Stop();
+        };
+
+            /*开始*/
+            var Start=function(){
+                if(isRun!="start"){
+                    isRun="start";
+                    order=document.getElementById('random').checked;
+                    alrStr=document.getElementById('debar').checked;
+                    list=document.getElementById("list").value;
+                    var Strs=list.split("\n");
+                        list=List(Strs);
+                        console.log("list:"+list);
+                    if(list!=""&&list!=" "){
+                        Beat();
+                    }else
+                        Displayer.innerHTML="<span style='font-size:70px;text-align:center;'>请先输入名单!</span>";//名单为空则显示提示
+                }
+            }
+
+            /*循环列表*/
+            var Beat=function() {
+                trS++;
+                if(trS>=list.length)
+                    trS=0;
+                Displayer.innerHTML=list[trS];
+                status=setTimeout(Beat,10);//每0.01秒循环一次
+            }
+
+            /*停止*/
+            var Stop=function() {
+                if (isRun!="stop") {
+                    isRun="stop";
+                    list=AlrStr(list);
+                    clearTimeout(status);
+                }
+            }
+
+            /*格式化名单*/
+            var List=function(dir){
+                for(var i=0;i<dir.length;i++){
+                    while(dir[i].indexOf(" ")!=-1)
+                        dir[i]=dir[i].replace(" ","");//去空格
+                    if(dir[i]==""||dir[i]=="\n"||dir[i]=="undefined")
+                        for(var j=i;j<dir.length;j++)
+                            if(j==dir.length-1)
+                                dir.length-=1;
+                            else
+                                dir[j]=dir[j+1];
+                }
+                return dir;
+            }
+
+            /*排除已点*/
+            var AlrStr=function(dir){
+                var Strs="";
+                if(alrStr){
+                    for(var i=0;i<dir.length;i++){
+                        if (i>=trS)
+                            dir[i]=dir[i+1];
+                        if(i==dir.length-1)
+                            dir.length-=1;
+                        else{
+                            if(dir[i]!= ""||dir[i]!="\n"||dir[i]!="undefined")
+                                Strs+=dir[i]+"\n";
+                        }
+                    }
+                }else{
+                    for(var i=0;i<dir.length;i++) {
+                            if(dir[i]!= ""||dir[i]!="\n"||dir[i]!="undefined")
+                                Strs+=dir[i]+"\n";
+                    }
+                }
+                document.getElementById("list").value=Strs;
+                return dir;
+            }
+        }
+        /*容器垂直居中*/
         function Vertcal() {
             var Div=document.getElementById('Boxs');
             var WinHeight=0;
@@ -72,77 +185,9 @@
                 WinHeight=document.documentElement.clientHeight;
             Div.style.marginTop=(WinHeight-parseInt(Div.style.height))/2+'px';
         }
-
-        var start=function(){
-            if(JudBtn!="start") {//防止按钮重复点击
-                text=document.getElementById("text").value;//获取名单;
-                if (text!=""){//非空值则执行下一步
-                    JudBtn="start";
-                    strs=text.split("\n");//分割名单为数组
-                    for(var i=0;i<strs.length;i++)//遍历数组，检查数组内的空值转义字符并删除
-                        if(strs[i]==""||strs[i]==" "||strs[i]=="\n")
-                            for(var j=i;j<strs.length;j++)
-                                if(j==strs.length-1)
-                                    strs.length-=1;//数组长度缩减
-                                else
-                                    strs[j]=strs[j+1];//补上空位
-                    beat();
-                }else{
-                    displayer.innerHTML="<span style='font-size:70px;text-align:center;'>请先输入名单!</span>";//名单为空则显示提示
-                }
-            }
-        }
-
-        var stop=function() {
-            if (JudBtn!="stop") {
-                JudBtn="stop";
-                text="";//停止
-                for(var j=0;j<strs.length;j++) {
-                    if (j>=sc)
-                        strs[j] = strs[j +1];
-                    if(j+1 == strs.length)
-                        strs.length-=1;
-                    else{
-                        if(strs[j]!= ""||strs[j]!="\n"||strs[j]!="undefined")
-                        text+=strs[j]+"\n";
-                    }
-                }
-                document.getElementById("text").value=text;
-                clearTimeout(status);
-            }
-        }
-
-        var beat=function() {
-            sc++;
-            if(sc>=strs.length)
-                sc=0;
-            displayer.innerHTML=strs[sc];
-            status=setTimeout(beat,10);//每0.01秒循环一次
-        }
-        /*判断文本框焦点情况*/
-        function Judon(dir) {
-            JudOn=dir;
-        }
-        /*键盘控制*/
-        function Controller(event) {
-            "use strict";
-            //alert(event.keyCode);
-            //var Key=event.keyCode;
-            if (JudOn) {
-                if (event.keyCode == 32) {
-                    if (JudTrue) {
-                        JudTrue = false;
-                        stop();
-                    } else {
-                        JudTrue = true;
-                        start();
-                    }
-                }
-            }
-        }
+        RollCall();
         window.onload=Vertcal;
         window.onresize=Vertcal;
-        document.onkeydown = Controller;
     </script>
 </body>
 </html>
