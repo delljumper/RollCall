@@ -76,7 +76,6 @@
         </div>
         <div id="calllist" style="width:200px;height:90%;float:left;margin-top:20px;padding-top:25px;background:#DCDCDC;overflow:auto;overflow-x:hidden;">
         <h3 style="padding-left:20px;">已点名单:</h3>
-        <p>xxxxxx</p>
         </div>
     </div>
     <p style="width:500px;height:30px;color:#666;text-align:center;margin:20px auto;font-size:12px;">Roll Call&nbsp;Alpha&nbsp;Copyright&copy;zhangke</p>
@@ -84,6 +83,7 @@
     <script type="text/javascript">
         function RollCall(){
             var Displayer=document.getElementById("displayer");//显示器
+            var CallList=document.getElementById("calllist");//已点名单
             var list;//名单
             var isRun="stop";//当前正在执行的功能
             //var Strs=new Array();//名单列表数组
@@ -154,6 +154,16 @@
                 var Strs="";
                 if(alrStr){
                     for(var i=0;i<dir.length;i++){
+                        if(i==trS){
+                            var p=document.createElement("p");
+                            var dir2;
+                            if((CallList.childNodes.length-2)<10)
+                                dir2="&nbsp;&nbsp;"+(CallList.childNodes.length-2);
+                            else
+                                dir2=CallList.childNodes.length-2;
+                            p.innerHTML=dir2+". "+dir[i];
+                            CallList.appendChild(p);
+                        }
                         if (i>=trS)
                             dir[i]=dir[i+1];
                         if(i==dir.length-1)
@@ -165,8 +175,18 @@
                     }
                 }else{
                     for(var i=0;i<dir.length;i++) {
-                            if(dir[i]!= ""||dir[i]!="\n"||dir[i]!="undefined")
-                                Strs+=dir[i]+"\n";
+                        if(i==trS){
+                            var p=document.createElement("p");
+                            var dir2;
+                            if((CallList.childNodes.length-2)<10)
+                                dir2="&nbsp;&nbsp;"+(CallList.childNodes.length-2);
+                            else
+                                dir2=CallList.childNodes.length-2;
+                            p.innerHTML=dir2+". "+dir[i];
+                            CallList.appendChild(p);
+                        }
+                        if(dir[i]!= ""||dir[i]!="\n"||dir[i]!="undefined")
+                            Strs+=dir[i]+"\n";
                     }
                 }
                 document.getElementById("list").value=Strs;
