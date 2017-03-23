@@ -17,3 +17,7 @@ log:
 @version Alpha 2.0
 log:
 添加选择文件功能.
+
+@version Alpha 3.0
+log:
+添加保存文件功能.

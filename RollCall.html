@@ -46,6 +46,8 @@
     -->
     </style>
     <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="assets/Blob.js"></script>
+    <script src="assets/FileSaver.js"></script>
 </head>
 <body>
     <div id="Boxs" style="width:940px;height:530px;margin:auto;">
@@ -69,6 +71,8 @@
             <label><input id="debar" type="checkbox" checked="checked" />:排除已点</label>
             <br />
             <label><input id="file" type="file"/>请选择编码为UTF-8的文件</label>
+            <br />
+            <label><input id="save" type="button" value="保存列表" /></label>
             </form>
         </div>
         <div id="calllist" style="width:200px;height:90%;float:left;margin-top:20px;padding-top:25px;background:#DCDCDC;overflow:auto;overflow-x:hidden;">
@@ -96,6 +100,9 @@
             };
             document.getElementById("file").onchange=function(){
                 upload(this);
+            }
+            document.getElementById("save").onclick=function(){
+                Save();
             }
             /*LocalStorage*/
 /*            var LocalStr=function(key){
@@ -265,6 +272,18 @@
                     document.getElementById("list").value=xmlDoc.xml;
                 }else{
                     Displayer.innerHTML='Error';
+                }
+            }
+            var Save=function(){
+                list=document.getElementById("list").value;
+                var Strs=list.split("\n");
+                var Jud=List(Strs);
+                if(Jud!=""&&Jud!=" "){
+                    var blob=new Blob([list.replace(/\n/g,"\r\n")], {type:"text/plain;charset="+document.characterSet});
+                    saveAs(blob, "1.txt");
+                }else{
+                    Displayer.style.lineHeight="145px";
+                    Displayer.innerHTML="<span style='font-size:70px;'>请先输入名单!</span>";
                 }
             }
         }
