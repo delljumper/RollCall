@@ -13,3 +13,7 @@ log:
 @version Alpha 1.5
 log:
 添加随机顺序功能.
+
+@version Alpha 2.0
+log:
+添加选择文件功能.
